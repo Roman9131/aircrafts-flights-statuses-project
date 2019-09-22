@@ -17,14 +17,14 @@ export default class FlightListRow extends React.PureComponent<IFlightListProps>
       props: {
         item: {
           flightNumber, status, carrierFsCode, departureDate, arrivalAirportFsCode,
-          codeshares, flightEquipment, departureAirportFsCode,
+          codeshares, flightEquipment, departureAirportFsCode, arrivalDate,
         },
         dictionaries,
         type,
       },
     } = this;
 
-    const time = new Date(departureDate.dateUtc);
+    const time = type === 'arrivals' ? new Date(arrivalDate.dateLocal) : new Date(departureDate.dateLocal);
     const tempMinutes = time.getMinutes();
     const minutes = (tempMinutes < 10) ? `0${tempMinutes}` : tempMinutes;
     const hour = time.getHours();

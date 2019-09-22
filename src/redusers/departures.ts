@@ -22,13 +22,9 @@ export const departureList: Reducer<IDepurtureListState> = (state = defaultState
     case types.ASYNC_GET_DEPARTURES_LIST:
       return {
         ...state,
+        isLoading: true,
         data: {},
         flightDeparturesList: [],
-      };
-    case types.TOGGLE_DEPARTURES_LOADING:
-      return {
-        ...state,
-        isLoading: !state.isLoading,
       };
     case types.ASYNC_GET_DEPARTURES_LIST_SUCCESS:
       return {
