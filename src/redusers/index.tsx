@@ -11,6 +11,6 @@ export interface IStore {
   dictionaries: IDictionariesState;
 }
 
-const reducers = combineReducers<IStore>({arrivalsList, departureList, dictionaries });
+const reducers = combineReducers<IStore>({ arrivalsList, departureList, dictionaries });
 
 export default reducers;

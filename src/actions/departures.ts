@@ -1,5 +1,5 @@
 import { Action, AnyAction } from 'redux';
-import { IDataModel } from "../@types";
+import { IDataModel } from '../@types';
 
 import * as types from '../constants';
 
@@ -15,12 +15,12 @@ export const asyncGetDeparturesList: IAsyncGetDeparturesList = () => ({
   type: types.ASYNC_GET_DEPARTURES_LIST,
 });
 
-export const asyncGetDeparturesSuccess: IAsyncGetDeparturesSuccess = data => ({
+export const asyncGetDeparturesSuccess: IAsyncGetDeparturesSuccess = (data) => ({
   type: types.ASYNC_GET_DEPARTURES_LIST_SUCCESS,
   data,
 });
 
-export const asyncGetDeparturesError: IAsyncGetDeparturesError = error => ({
+export const asyncGetDeparturesError: IAsyncGetDeparturesError = (error) => ({
   type: types.ASYNC_GET_DEPARTURES_LIST_ERROR,
   error,
 });

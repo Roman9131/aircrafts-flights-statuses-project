@@ -4,8 +4,6 @@ import * as actions from '../actions';
 import { axiosGetDeparturesList } from '../api';
 
 export default function* fetchDeparturesList() {
-
-
   try {
     const res = yield call(axiosGetDeparturesList);
 

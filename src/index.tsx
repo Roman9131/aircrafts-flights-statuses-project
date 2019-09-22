@@ -20,8 +20,9 @@ sagaMiddleware.run(rootSaga);
 
 reactDom.render(
   <Provider store={store}>
-    <App/>
+    <App />
   </Provider>,
-  document.getElementById('root'));
+  window.document.getElementById('root'),
+);
 
 serviceWorker.unregister();

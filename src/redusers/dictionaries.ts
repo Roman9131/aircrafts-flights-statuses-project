@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 
 import * as types from '../constants';
-import { IDataModel } from "../@types";
+import { IDataModel } from '../@types';
 
 export interface IDictionariesState {
   airportsDict: Dictionary;
@@ -14,31 +14,16 @@ export interface Dictionary {
 }
 
 const defaultState: IDictionariesState = {
-    airportsDict: {},
-    airlinesDict: {},
-    aircraftsDict: {},
-};
-
-export const dictionaries: Reducer<IDictionariesState> = (state = defaultState, action) => {
-  switch (action.type) {
-    case types.SET_DICTIONARIES:
-      console.log(action.data)
-      return {
-        ...state,
-          airportsDict: setAirportsDict(action.data),
-          airlinesDict: setAirlinesDict(action.data),
-          aircraftsDict: setAircraftDict(action.data),
-      };
-    default:
-      return state;
-  }
+  airportsDict: {},
+  airlinesDict: {},
+  aircraftsDict: {},
 };
 
 function setAirportsDict(list: IDataModel) {
   const dict: Dictionary = {};
-  const airports = list.appendix.airports;
-  for (let airport in airports) {
-    let airportCodeIata = airports[airport].iata;
+  const { airports } = list.appendix;
+  for (const airport in airports) {
+    const airportCodeIata = airports[airport].iata;
     dict[airportCodeIata] = airports[airport].city;
   }
   return dict;
@@ -46,9 +31,9 @@ function setAirportsDict(list: IDataModel) {
 
 function setAirlinesDict(list: IDataModel) {
   const dict: Dictionary = {};
-  const airlines = list.appendix.airlines;
-  for (let airline in airlines) {
-    let airlineFsCode = airlines[airline].fs;
+  const { airlines } = list.appendix;
+  for (const airline in airlines) {
+    const airlineFsCode = airlines[airline].fs;
     dict[airlineFsCode] = airlines[airline].name;
   }
   return dict;
@@ -57,9 +42,23 @@ function setAirlinesDict(list: IDataModel) {
 function setAircraftDict(list: IDataModel) {
   const dict: Dictionary = {};
   const aircrafts = list.appendix.equipments;
-  for (let aircraft in aircrafts) {
-    let aircraftIataCode = aircrafts[aircraft].iata;
+  for (const aircraft in aircrafts) {
+    const aircraftIataCode = aircrafts[aircraft].iata;
     dict[aircraftIataCode] = aircrafts[aircraft].name;
   }
   return dict;
 }
+
+export const dictionaries: Reducer<IDictionariesState> = (state = defaultState, action) => {
+  switch (action.type) {
+    case types.SET_DICTIONARIES:
+      return {
+        ...state,
+        airportsDict: setAirportsDict(action.data),
+        airlinesDict: setAirlinesDict(action.data),
+        aircraftsDict: setAircraftDict(action.data),
+      };
+    default:
+      return state;
+  }
+};

@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 
 import * as types from '../constants';
-import { IDataModel, FlightStatuses } from "../@types";
+import { IDataModel, FlightStatuses } from '../@types';
 
 export interface IDepurtureListState {
   data: IDataModel | {};
