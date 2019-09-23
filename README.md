@@ -4,11 +4,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `node server.js`
-
-
-Before starting the application, you need to start the server from `data-server` folder, it will return data, when application requested to it on [http://localhost:3100](http://localhost:3100).
-
 ### `npm start`
 
 Runs the app in the development mode.<br>
