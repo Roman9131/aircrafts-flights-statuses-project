@@ -64,7 +64,8 @@ export interface DateLocalVsUts {
 }
 
 export interface Delays {
-  arrivalRunwayDelayMinutes: number;
+  arrivalGateDelayMinutes: number;
+  departureGateDelayMinutes: number;
 }
 
 export interface FlightDurations {

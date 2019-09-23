@@ -14,6 +14,7 @@ import { IDictionariesState } from '../../redusers/dictionaries';
 
 interface State {
   searchTerm: string;
+  showDelayedFlights: boolean;
 }
 
 interface IMappedProps {
@@ -42,11 +43,16 @@ const mapDispatchToProps = (dispatch: Dispatch): IDispatchedProps => (
   }
 );
 
-class Departures extends React.Component<IMappedProps & IDispatchedProps> {
+class Departures extends React.Component<IMappedProps & IDispatchedProps, State> {
   static dislayName: string = 'departures';
-  state: State = {
-    searchTerm: '',
-  };
+
+  constructor(props: IMappedProps & IDispatchedProps) {
+    super(props);
+    this.state = {
+      searchTerm: '',
+      showDelayedFlights: false,
+    };
+  }
 
   componentDidMount(): void {
     const { asyncGetDeparturesList: getList } = this.props;
@@ -57,19 +63,31 @@ class Departures extends React.Component<IMappedProps & IDispatchedProps> {
     this.setState({ searchTerm: e.target.value });
   };
 
+  private handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ showDelayedFlights: e.target.checked });
+  };
+
   render() {
     const {
       props: {
         flightDeparturesList, error, isLoading, dictionaries,
       },
       state: {
-        searchTerm,
+        searchTerm, showDelayedFlights,
       },
       onSearchChange,
     } = this;
 
-    const flightListFlltredByNumber: FlightStatuses[] = searchTerm
+    const flightListFlltredByNumber: FlightStatuses[] = searchTerm || showDelayedFlights
       ? flightDeparturesList.filter((item) => {
+        if (showDelayedFlights) {
+          const { delays } = item;
+          const delayMinutes: number | undefined = delays && delays.departureGateDelayMinutes
+            ? delays.departureGateDelayMinutes : undefined;
+          return delayMinutes ? delayMinutes > 0 : false;
+        }
+        return true;
+      }).filter((item) => {
         const flightSrting: string = `${item.carrierFsCode}${item.flightNumber}`;
         return flightSrting.toLocaleLowerCase().indexOf(searchTerm.toLocaleLowerCase()) !== -1;
       }) : flightDeparturesList;
@@ -85,6 +103,17 @@ class Departures extends React.Component<IMappedProps & IDispatchedProps> {
                 ? (
                   <div>
                     <Search placeholder="Search by flight" value={searchTerm} onChange={onSearchChange} />
+                    <div className="content__checkbox">
+                      <label>
+                        <input
+                          name="ischecked"
+                          type="checkbox"
+                          checked={showDelayedFlights}
+                          onChange={this.handleInputChange}
+                        />
+                        Показывать только задержанные рейсы.
+                      </label>
+                    </div>
                     <div className="content__table">
                       <div className="table-header">
                         <div className="table-header__time">TIME</div>
