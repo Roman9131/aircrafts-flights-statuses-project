@@ -1,52 +1,24 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { Dispatch } from 'redux';
 
 import './styles.sass';
 import Header from '../../components/Header';
 import Search from '../../components/Search';
 import loader from '../../images/loader.gif';
-import { IStore } from '../../redusers';
 import FlightListRow from '../../components/FlightListRow';
 import { FlightStatuses } from '../../@types';
-import { asyncGetDeparturesList, IAsyncGetDeparturesList } from '../../actions';
-import { IDictionariesState } from '../../redusers/dictionaries';
+import { IArrivalsContainerProps } from '../../containers/ArrivalsContainer';
 
 interface State {
   searchTerm: string;
   showDelayedFlights: boolean;
 }
 
-interface IMappedProps {
-  flightDeparturesList: FlightStatuses[];
-  dictionaries: IDictionariesState;
-  isLoading: boolean;
-  error: boolean;
-}
+interface IArrivalsProps extends IArrivalsContainerProps {}
 
-interface IDispatchedProps {
-  asyncGetDeparturesList: IAsyncGetDeparturesList;
-}
+export default class Arrivals extends React.Component<IArrivalsProps, State> {
+  static dislayName: string = 'arrivals';
 
-const mapStateToProps = (state: IStore): IMappedProps => (
-  {
-    flightDeparturesList: state.departureList.flightDeparturesList,
-    dictionaries: state.dictionaries,
-    isLoading: state.departureList.isLoading,
-    error: state.departureList.error,
-  }
-);
-
-const mapDispatchToProps = (dispatch: Dispatch): IDispatchedProps => (
-  {
-    asyncGetDeparturesList: () => dispatch(asyncGetDeparturesList()),
-  }
-);
-
-class Departures extends React.Component<IMappedProps & IDispatchedProps, State> {
-  static dislayName: string = 'departures';
-
-  constructor(props: IMappedProps & IDispatchedProps) {
+  constructor(props: IArrivalsProps) {
     super(props);
     this.state = {
       searchTerm: '',
@@ -55,8 +27,8 @@ class Departures extends React.Component<IMappedProps & IDispatchedProps, State>
   }
 
   componentDidMount(): void {
-    const { asyncGetDeparturesList: getList } = this.props;
-    getList();
+    const { asyncGetArrivalsList } = this.props;
+    asyncGetArrivalsList();
   }
 
   private onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +42,7 @@ class Departures extends React.Component<IMappedProps & IDispatchedProps, State>
   render() {
     const {
       props: {
-        flightDeparturesList, error, isLoading, dictionaries,
+        flightArrivalsList, error, isLoading, dictionaries,
       },
       state: {
         searchTerm, showDelayedFlights,
@@ -78,19 +50,19 @@ class Departures extends React.Component<IMappedProps & IDispatchedProps, State>
       onSearchChange,
     } = this;
 
-    const flightListFlltredByNumber: FlightStatuses[] = searchTerm || showDelayedFlights
-      ? flightDeparturesList.filter((item) => {
+    const flightListFlltred: FlightStatuses[] = searchTerm || showDelayedFlights
+      ? flightArrivalsList.filter((item) => {
         if (showDelayedFlights) {
           const { delays } = item;
-          const delayMinutes: number | undefined = delays && delays.departureGateDelayMinutes
-            ? delays.departureGateDelayMinutes : undefined;
+          const delayMinutes: number | undefined = delays && delays.arrivalGateDelayMinutes
+            ? delays.arrivalGateDelayMinutes : undefined;
           return delayMinutes ? delayMinutes > 0 : false;
         }
         return true;
       }).filter((item) => {
         const flightSrting: string = `${item.carrierFsCode}${item.flightNumber}`;
         return flightSrting.toLocaleLowerCase().indexOf(searchTerm.toLocaleLowerCase()) !== -1;
-      }) : flightDeparturesList;
+      }) : flightArrivalsList;
 
     return (
       <div className="page">
@@ -98,8 +70,8 @@ class Departures extends React.Component<IMappedProps & IDispatchedProps, State>
           <Header />
           <div className="content">
             <div className="content-wrapper">
-              <h2 className="content__title"> Departures </h2>
-              {flightDeparturesList.length
+              <h2 className="content__title"> Arrivals </h2>
+              {flightArrivalsList.length
                 ? (
                   <div>
                     <Search placeholder="Search by flight" value={searchTerm} onChange={onSearchChange} />
@@ -118,17 +90,17 @@ class Departures extends React.Component<IMappedProps & IDispatchedProps, State>
                       <div className="table-header">
                         <div className="table-header__time">TIME</div>
                         <div className="table-header__number">FLIGHT</div>
-                        <div className="table-header__destination-city">TO</div>
+                        <div className="table-header__destination-city">From</div>
                         <div className="table-header__airline-name">AIRLINE</div>
                         <div className="table-header__aircraft-name">AIRCRAFT</div>
                         <div className="table-header__status">STATUS</div>
                       </div>
                       <div className="table-body">
-                        {flightListFlltredByNumber.map((item) => (
+                        {flightListFlltred.map((item) => (
                           <FlightListRow
                             key={item.flightId}
                             dictionaries={dictionaries}
-                            type={Departures.dislayName}
+                            type={Arrivals.dislayName}
                             item={item}
                           />
                         ))}
@@ -137,18 +109,17 @@ class Departures extends React.Component<IMappedProps & IDispatchedProps, State>
                   </div>
                 )
                 : !isLoading && !error
-                && <div className="text-container"><span>Departure flight list is empty</span></div>}
-              {flightDeparturesList.length > 0 && !flightListFlltredByNumber.length
+                && <div className="text-container"><span>Arrival flights list is empty</span></div>}
+              {flightArrivalsList.length > 0 && !flightListFlltred.length
               && (
                 <div className="text-container">
-                  <span className="warning-text">Departure flight is not found</span>
+                  <span className="warning-text">Arrival flights is not found</span>
                 </div>
               )}
               {isLoading && <div><img alt="loader" src={loader} /></div>}
-              {error
-              && (
+              {error && (
                 <div className="text-container">
-                  <span className="error-text">Error of download departure flight list</span>
+                  <span className="error-text">Error of download arrival flights list</span>
                 </div>
               )}
             </div>
@@ -158,5 +129,3 @@ class Departures extends React.Component<IMappedProps & IDispatchedProps, State>
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(Departures);
