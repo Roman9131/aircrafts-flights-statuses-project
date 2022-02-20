@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './styles.sass';
+import './styles.scss';
 import { FlightStatuses } from '../../@types';
 import { IDictionariesState } from '../../redusers/dictionaries';
 

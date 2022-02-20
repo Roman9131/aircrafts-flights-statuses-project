@@ -1,12 +1,10 @@
 import React from 'react';
-
 import {
   Route, BrowserRouter as Router, Redirect, Switch,
 } from 'react-router-dom';
-
-import './app.sass';
 import DeparturesContainer from './containers/DeparturesContainer';
 import ArrivalsContainer from './containers/ArrivalsContainer';
+import './app.scss';
 
 const App: React.FC = () => (
   <Router>

@@ -1,12 +1,11 @@
 import * as React from 'react';
-
-import './styles.sass';
 import Header from '../../components/Header';
 import Search from '../../components/Search';
 import loader from '../../images/loader.gif';
 import FlightListRow from '../../components/FlightListRow';
 import { FlightStatuses } from '../../@types';
 import { IArrivalsContainerProps } from '../../containers/ArrivalsContainer';
+import './styles.scss';
 
 interface State {
   searchTerm: string;

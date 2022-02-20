@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './styles.sass';
+import './styles.scss';
 
 interface ISearchProps {
   value: string;

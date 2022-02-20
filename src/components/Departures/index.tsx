@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import './styles.sass';
+import './styles.scss';
 import Header from '../../components/Header';
 import Search from '../../components/Search';
 import loader from '../../images/loader.gif';

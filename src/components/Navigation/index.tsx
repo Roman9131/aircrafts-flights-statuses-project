@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import './styles.sass';
+import './styles.scss';
 
 export default class Navigation extends React.PureComponent {
   render() {
